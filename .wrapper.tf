@@ -7,7 +7,3 @@ module "org" {
 
   domain_name = "${var.domain_name}"
 }
-
-output org {
-  value = "${data.external.org.result}"
-}
