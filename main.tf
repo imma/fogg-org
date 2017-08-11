@@ -579,3 +579,19 @@ resource "aws_codecommit_repository" "org" {
   repository_name = "${var.account_name}"
   description     = "Repo for ${var.account_name} org"
 }
+
+resource "aws_kms_key" "org" {
+  description         = "Organization ${var.acount_name}"
+  enable_key_rotation = true
+
+  tags {
+    "ManagedBy" = "terraform"
+    "Env"       = "global"
+    "Name"      = "${var.account_name}"
+  }
+}
+
+resource "aws_kms_alias" "org" {
+  name          = "alias/org"
+  target_key_id = "${aws_kms_key.org.id}"
+}
