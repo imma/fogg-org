@@ -581,7 +581,7 @@ resource "aws_codecommit_repository" "org" {
 }
 
 resource "aws_kms_key" "org" {
-  description         = "Organization ${var.acount_name}"
+  description         = "Organization ${var.account_name}"
   enable_key_rotation = true
 
   tags {
