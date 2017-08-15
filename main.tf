@@ -595,3 +595,8 @@ resource "aws_kms_alias" "org" {
   name          = "alias/org"
   target_key_id = "${aws_kms_key.org.id}"
 }
+
+resource "aws_kms_alias" "parameter_store" {
+  name          = "alias/paramter_store_key"
+  target_key_id = "${aws_kms_key.org.id}"
+}
