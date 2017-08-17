@@ -654,3 +654,8 @@ resource "aws_iam_role_policy_attachment" "macie_setup" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonMacieSetupRole"
   count      = "${var.want_macie}"
 }
+
+resource "aws_iam_group_policy_attachment" "macie_setup_admin" {
+  group      = "${aws_iam_group.macie_setup.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+}
