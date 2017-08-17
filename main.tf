@@ -602,7 +602,7 @@ resource "aws_kms_alias" "parameter_store" {
 }
 
 resource "aws_iam_role" "macie_service" {
-  name  = "config"
+  name  = "AWSMacieServiceCustomerSetupRole"
   count = "${var.want_macie}"
 
   assume_role_policy = <<POLICY
@@ -623,13 +623,13 @@ POLICY
 }
 
 resource "aws_iam_role_policy_attachment" "macie_service" {
-  role       = "${aws_iam_role.config.name}"
+  role       = "${aws_iam_role.macie_service.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonMacieServiceRole"
   count      = "${var.want_macie}"
 }
 
 resource "aws_iam_role" "macie_setup" {
-  name  = "config"
+  name  = "AWSMacieServiceCustomerServiceRole"
   count = "${var.want_macie}"
 
   assume_role_policy = <<POLICY
@@ -650,7 +650,7 @@ POLICY
 }
 
 resource "aws_iam_role_policy_attachment" "macie_setup" {
-  role       = "${aws_iam_role.config.name}"
+  role       = "${aws_iam_role.macie_setup.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonMacieSetupRole"
   count      = "${var.want_macie}"
 }
