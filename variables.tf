@@ -6,6 +6,10 @@ variable "domain_name" {}
 
 variable "account_name" {}
 
+variable "want_macie" {
+  default = false
+}
+
 output "aws_account_id" {
   value = "${data.aws_caller_identity.current.account_id}"
 }

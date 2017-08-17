@@ -600,3 +600,57 @@ resource "aws_kms_alias" "parameter_store" {
   name          = "alias/parameter_store_key"
   target_key_id = "${aws_kms_key.org.id}"
 }
+
+resource "aws_iam_role" "macie_service" {
+  name  = "config"
+  count = "${var.want_macie}"
+
+  assume_role_policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "macie.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+POLICY
+}
+
+resource "aws_iam_role_policy_attachment" "macie_service" {
+  role       = "${aws_iam_role.config.name}"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonMacieServiceRole"
+  count      = "${var.want_macie}"
+}
+
+resource "aws_iam_role" "macie_setup" {
+  name  = "config"
+  count = "${var.want_macie}"
+
+  assume_role_policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "macie.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+POLICY
+}
+
+resource "aws_iam_role_policy_attachment" "macie_setup" {
+  role       = "${aws_iam_role.config.name}"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonMacieSetupRole"
+  count      = "${var.want_macie}"
+}
