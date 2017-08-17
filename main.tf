@@ -628,6 +628,12 @@ resource "aws_iam_role_policy_attachment" "macie_service" {
   count      = "${var.want_macie}"
 }
 
+resource "aws_iam_role_policy_attachment" "macie_service_admin" {
+  role       = "${aws_iam_role.macie_service.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+  count      = "${var.want_macie}"
+}
+
 resource "aws_iam_role" "macie_setup" {
   name  = "AWSMacieServiceCustomerServiceRole"
   count = "${var.want_macie}"
@@ -656,7 +662,7 @@ resource "aws_iam_role_policy_attachment" "macie_setup" {
 }
 
 resource "aws_iam_role_policy_attachment" "macie_setup_admin" {
-  role = "${aws_iam_role.macie_setup.name}"
+  role       = "${aws_iam_role.macie_setup.name}"
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
   count      = "${var.want_macie}"
 }
