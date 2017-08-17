@@ -656,6 +656,7 @@ resource "aws_iam_role_policy_attachment" "macie_setup" {
 }
 
 resource "aws_iam_role_policy_attachment" "macie_setup_admin" {
-  group      = "${aws_iam_role.macie_setup.name}"
+  role = "${aws_iam_role.macie_setup.name}"
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+  count      = "${var.want_macie}"
 }
