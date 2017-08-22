@@ -37,3 +37,7 @@ output "config_sqs" {
 output "cloudfront" {
   value = "${aws_cloudfront_distribution.website.domain_name}"
 }
+
+output "kms_arn" {
+  value = "${aws.kms_key.org.arn}"
+}
