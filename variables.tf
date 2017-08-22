@@ -39,5 +39,5 @@ output "cloudfront" {
 }
 
 output "kms_arn" {
-  value = "${aws.kms_key.org.arn}"
+  value = "${aws_kms_key.org.arn}"
 }
