@@ -194,8 +194,9 @@ resource "aws_sns_topic" "config" {
 }
 
 resource "aws_sqs_queue" "config" {
-  name   = "config"
-  policy = "${data.aws_iam_policy_document.config_sns_sqs.json}"
+  name              = "config"
+  policy            = "${data.aws_iam_policy_document.config_sns_sqs.json}"
+  kms_master_key_id = "${aws_kms_alias.org.name}"
 }
 
 data "aws_iam_policy_document" "config_sns_sqs" {
