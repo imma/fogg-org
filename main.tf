@@ -469,8 +469,8 @@ resource "aws_route53_record" "website" {
 
 resource "aws_dynamodb_table" "terraform_state_lock" {
   name           = "terraform_state_lock"
-  read_capacity  = 20
-  write_capacity = 20
+  read_capacity  = 1
+  write_capacity = 1
   hash_key       = "LockID"
 
   attribute {
