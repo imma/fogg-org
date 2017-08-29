@@ -40,7 +40,7 @@ data "aws_iam_policy_document" "administrators" {
     ]
 
     resources = [
-      "${aws_kms_alias.org.arn}",
+      "${aws_kms_key.org.id}"
     ]
 
     condition {
