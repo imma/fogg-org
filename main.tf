@@ -54,7 +54,7 @@ data "aws_iam_policy_document" "operators" {
     ]
 
     resources = [
-      "${aws_kms_key.org.id}",
+      "${aws_kms_key.org.arn}",
     ]
 
     condition {
