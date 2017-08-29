@@ -23,7 +23,13 @@ data "aws_acm_certificate" "website" {
 }
 
 resource "aws_iam_group" "administrators" {
-  name   = "administrators"
+  name = "administrators"
+}
+
+resource "aws_iam_group_policy" "administrators" {
+  name  = "administrators"
+  group = "${aws_iam_group.administrators.id}"
+
   policy = "${data.aws_iam_policy_document.administrators.json}"
 }
 
