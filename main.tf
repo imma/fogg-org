@@ -23,7 +23,44 @@ data "aws_acm_certificate" "website" {
 }
 
 resource "aws_iam_group" "administrators" {
-  name = "administrators"
+  name   = "administrators"
+  policy = "${data.aws_iam_policy_document.administrators.json}"
+}
+
+data "aws_iam_policy_document" "administrators" {
+  statement {
+    actions = [
+      "kms:Encrypt",
+    ]
+
+    resources = [
+      "${aws_kms_alias.org.arn}",
+    ]
+
+    condition {
+      test     = "StringLike"
+      variable = "kms:EncryptionContext:to"
+      values   = ["*"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "kms:EncryptionContext:user_type"
+      values   = ["user"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "kms:EncryptionContext:from"
+      values   = ["$${aws:username}"]
+    }
+
+    condition {
+      test     = "Bool"
+      variable = "aws:MultiFactorAuthPresent"
+      values   = ["true"]
+    }
+  }
 }
 
 resource "aws_iam_group_policy_attachment" "administrators_iam_full_access" {
