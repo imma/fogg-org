@@ -26,21 +26,35 @@ resource "aws_iam_group" "administrators" {
   name = "administrators"
 }
 
-resource "aws_iam_group_policy" "administrators" {
-  name  = "administrators"
-  group = "${aws_iam_group.administrators.id}"
-
-  policy = "${data.aws_iam_policy_document.administrators.json}"
+resource "aws_iam_group_policy_attachment" "administrators_iam_full_access" {
+  group      = "${aws_iam_group.administrators.name}"
+  policy_arn = "arn:aws:iam::aws:policy/IAMFullAccess"
 }
 
-data "aws_iam_policy_document" "administrators" {
+resource "aws_iam_group_policy_attachment" "administrators_administrator_access" {
+  group      = "${aws_iam_group.administrators.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+}
+
+resource "aws_iam_group" "operators" {
+  name = "operators"
+}
+
+resource "aws_iam_group_policy" "operators" {
+  name  = "operators"
+  group = "${aws_iam_group.operators.id}"
+
+  policy = "${data.aws_iam_policy_document.operators.json}"
+}
+
+data "aws_iam_policy_document" "operators" {
   statement {
     actions = [
       "kms:Encrypt",
     ]
 
     resources = [
-      "${aws_kms_key.org.id}"
+      "${aws_kms_key.org.id}",
     ]
 
     condition {
@@ -67,16 +81,6 @@ data "aws_iam_policy_document" "administrators" {
       values   = ["true"]
     }
   }
-}
-
-resource "aws_iam_group_policy_attachment" "administrators_iam_full_access" {
-  group      = "${aws_iam_group.administrators.name}"
-  policy_arn = "arn:aws:iam::aws:policy/IAMFullAccess"
-}
-
-resource "aws_iam_group_policy_attachment" "administrators_administrator_access" {
-  group      = "${aws_iam_group.administrators.name}"
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
 resource "aws_s3_bucket" "meta" {
