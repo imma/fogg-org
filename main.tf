@@ -8,6 +8,11 @@ provider "aws" {
   region = "us-east-1"
 }
 
+provider "aws" {
+  alias  = "us_east_2"
+  region = "us-east-2"
+}
+
 data "aws_caller_identity" "current" {}
 
 data "aws_partition" "current" {}
@@ -47,6 +52,7 @@ resource "aws_iam_group_policy" "operators" {
   policy = "${data.aws_iam_policy_document.operators.json}"
 }
 
+# TODO need to authorize all of the global-env kms keys
 data "aws_iam_policy_document" "operators" {
   statement {
     actions = [
@@ -627,9 +633,24 @@ resource "aws_codecommit_repository" "org" {
   description     = "Repo for ${var.account_name} org"
 }
 
+# TODO these org keys are scoped per region
+variable "org_regions" {
+  default = ["us_east_1", "us_east_2", "us_west_2"]
+}
+
+variable "org_region_index" {
+  default = {
+    us_east_1 = 0
+    us_east_2 = 1
+    us_west_2 = 2
+  }
+}
+
 resource "aws_kms_key" "org" {
+  provider            = "aws.${element(var.org_regions,lookup(var.org_region_index,count.index))}"
   description         = "Organization ${var.account_name}"
   enable_key_rotation = true
+  count               = "${length(var.org_regions)}"
 
   tags {
     "ManagedBy" = "terraform"
