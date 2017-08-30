@@ -632,27 +632,40 @@ resource "aws_codecommit_repository" "org" {
   description     = "Repo for ${var.account_name} org"
 }
 
-variable "org_region_provider" {
-  default = {
-    us-east-1 = "us_east_1"
-    us-east-2 = "us_east_2"
-    us-west-2 = "us-west-2"
+resource "aws_kms_key" "org_us_east-1" {
+  provider            = "aws.us_east_1"
+  description         = "Organization ${var.account_name}"
+  enable_key_rotation = true
+
+  tags {
+    "ManagedBy" = "terraform"
+    "Env"       = "global"
+    "Name"      = "${var.account_name}"
   }
 }
 
-module "kms_us_east_1" {
-  source          = "module/kms_region"
-  region_provider = "aws.us_east_1"
+resource "aws_kms_key" "org_us_east-2" {
+  provider            = "aws.us_east_2"
+  description         = "Organization ${var.account_name}"
+  enable_key_rotation = true
+
+  tags {
+    "ManagedBy" = "terraform"
+    "Env"       = "global"
+    "Name"      = "${var.account_name}"
+  }
 }
 
-module "kms_us_east_2" {
-  source          = "module/kms_region"
-  region_provider = "aws.us_east_2"
-}
+resource "aws_kms_key" "org_us_west_2" {
+  provider            = "aws.us_west_2"
+  description         = "Organization ${var.account_name}"
+  enable_key_rotation = true
 
-module "kms_us_west_2" {
-  source          = "module/kms_region"
-  region_provider = "aws.us_west_2"
+  tags {
+    "ManagedBy" = "terraform"
+    "Env"       = "global"
+    "Name"      = "${var.account_name}"
+  }
 }
 
 resource "aws_iam_role" "macie_service" {
