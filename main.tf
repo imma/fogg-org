@@ -52,7 +52,6 @@ resource "aws_iam_group_policy" "operators" {
   policy = "${data.aws_iam_policy_document.operators.json}"
 }
 
-# TODO need to authorize all of the global-env kms keys
 data "aws_iam_policy_document" "operators" {
   statement {
     actions = [
@@ -60,7 +59,7 @@ data "aws_iam_policy_document" "operators" {
     ]
 
     resources = [
-      "${aws_kms_key.org.arn}",
+      "${aws_kms_key.org.*.arn}",
     ]
 
     condition {
@@ -633,7 +632,6 @@ resource "aws_codecommit_repository" "org" {
   description     = "Repo for ${var.account_name} org"
 }
 
-# TODO these org keys are scoped per region
 variable "org_regions" {
   default = ["us_east_1", "us_east_2", "us_west_2"]
 }
