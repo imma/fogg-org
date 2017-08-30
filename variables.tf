@@ -39,9 +39,17 @@ output "cloudfront" {
 }
 
 output "kms_arn" {
-  value = "${aws_kms_key.org.arn}"
+  value = {
+    us-east-1 = "${module.kms_us_east_1.kms_arn}"
+    us-east-2 = "${module.kms_us_east_2.kms_arn}"
+    us-west-2 = "${module.kms_us_west_2.kms_arn}"
+  }
 }
 
 output "kms_key_id" {
-  value = "${aws_kms_key.org.key_id}"
+  value = {
+    us-east-1 = "${module.kms_us_east_1.kms_key_id}"
+    us-east-2 = "${module.kms_us_east_2.kms_key_id}"
+    us-west-2 = "${module.kms_us_west_2.kms_key_id}"
+  }
 }

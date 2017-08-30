@@ -640,32 +640,19 @@ variable "org_region_provider" {
   }
 }
 
-module "kms_region" {
+module "kms_us_east_1" {
   source          = "module/kms_region"
-  region_provider = "aws.${lookup(var.org_region_provider,data.aws_region.current.name)}"
+  region_provider = "aws.us_east_1"
 }
 
-resource "aws_kms_key" "org" {
-  provider            = "aws.${element(var.org_regions,lookup(var.org_region_index,count.index))}"
-  description         = "Organization ${var.account_name}"
-  enable_key_rotation = true
-  count               = "${length(var.org_regions)}"
-
-  tags {
-    "ManagedBy" = "terraform"
-    "Env"       = "global"
-    "Name"      = "${var.account_name}"
-  }
+module "kms_us_east_2" {
+  source          = "module/kms_region"
+  region_provider = "aws.us_east_2"
 }
 
-resource "aws_kms_alias" "org" {
-  name          = "alias/org"
-  target_key_id = "${aws_kms_key.org.id}"
-}
-
-resource "aws_kms_alias" "parameter_store" {
-  name          = "alias/parameter_store_key"
-  target_key_id = "${aws_kms_key.org.id}"
+module "kms_us_west_2" {
+  source          = "module/kms_region"
+  region_provider = "aws.us_west_2"
 }
 
 resource "aws_iam_role" "macie_service" {

@@ -23,3 +23,7 @@ resource "aws_kms_key" "org" {
 output "kms_arn" {
   value = "${aws_kms_key.org.arn}"
 }
+
+output "kms_key_id" {
+  value = "${aws_kms_key.org.key_id}"
+}
