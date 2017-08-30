@@ -632,7 +632,7 @@ resource "aws_codecommit_repository" "org" {
   description     = "Repo for ${var.account_name} org"
 }
 
-resource "aws_kms_key" "org_us_east-1" {
+resource "aws_kms_key" "org_us_east_1" {
   provider            = "aws.us_east_1"
   description         = "Organization ${var.account_name}"
   enable_key_rotation = true
@@ -644,7 +644,7 @@ resource "aws_kms_key" "org_us_east-1" {
   }
 }
 
-resource "aws_kms_key" "org_us_east-2" {
+resource "aws_kms_key" "org_us_east_2" {
   provider            = "aws.us_east_2"
   description         = "Organization ${var.account_name}"
   enable_key_rotation = true
