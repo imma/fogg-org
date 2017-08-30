@@ -59,7 +59,7 @@ data "aws_iam_policy_document" "operators" {
     ]
 
     resources = [
-      "${aws_kms_key.org.*.arn}",
+      "arn:aws:kms:${data.aws_region.current.name}:{data.aws_caller_identity.current.account_id}:key/*",
     ]
 
     condition {
@@ -632,16 +632,17 @@ resource "aws_codecommit_repository" "org" {
   description     = "Repo for ${var.account_name} org"
 }
 
-variable "org_regions" {
-  default = ["us_east_1", "us_east_2", "us_west_2"]
+variable "org_region_provider" {
+  default = {
+    us-east-1 = "us_east_1"
+    us-east-2 = "us_east_2"
+    us-west-2 = "us-west-2"
+  }
 }
 
-variable "org_region_index" {
-  default = {
-    us_east_1 = 0
-    us_east_2 = 1
-    us_west_2 = 2
-  }
+module "kms_region" {
+  source          = "module/kms_region"
+  region_provider = "aws.${lookup(var.org_region_provider,data.aws_region.current.name)}"
 }
 
 resource "aws_kms_key" "org" {
