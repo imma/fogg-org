@@ -23,7 +23,7 @@ data "aws_region" "current" {
 
 data "aws_acm_certificate" "website" {
   provider = "aws.us_east_1"
-  domain   = "cf.${var.domain_name}"
+  domain   = "*.${var.domain_name}"
   statuses = ["ISSUED", "PENDING_VALIDATION"]
 }
 
@@ -509,7 +509,7 @@ resource "aws_route53_zone" "public" {
 
 resource "aws_route53_record" "website" {
   zone_id = "${aws_route53_zone.public.zone_id}"
-  name    = "cf.${var.domain_name}"
+  name    = "cdn.${var.domain_name}"
   type    = "A"
 
   alias {
@@ -592,7 +592,7 @@ resource "aws_cloudfront_distribution" "website" {
   default_root_object = "index.html"
   price_class         = "PriceClass_100"
 
-  aliases = ["cf.${var.domain_name}"]
+  aliases = ["cdn.${var.domain_name}"]
 
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
