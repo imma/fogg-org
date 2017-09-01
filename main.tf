@@ -13,6 +13,21 @@ provider "aws" {
   region = "us-east-2"
 }
 
+provider "aws" {
+  alias  = "eu_west_1"
+  region = "eu-west-1"
+}
+
+provider "aws" {
+  alias  = "eu_central_1"
+  region = "eu-central-1"
+}
+
+provider "aws" {
+  alias  = "ap_southeast_2"
+  region = "ap-southeast-2"
+}
+
 data "aws_caller_identity" "current" {}
 
 data "aws_partition" "current" {}
@@ -658,6 +673,42 @@ resource "aws_kms_key" "org_us_east_2" {
 
 resource "aws_kms_key" "org_us_west_2" {
   provider            = "aws.us_west_2"
+  description         = "Organization ${var.account_name}"
+  enable_key_rotation = true
+
+  tags {
+    "ManagedBy" = "terraform"
+    "Env"       = "global"
+    "Name"      = "${var.account_name}"
+  }
+}
+
+resource "aws_kms_key" "org_eu_west_1" {
+  provider            = "aws.eu_west_1"
+  description         = "Organization ${var.account_name}"
+  enable_key_rotation = true
+
+  tags {
+    "ManagedBy" = "terraform"
+    "Env"       = "global"
+    "Name"      = "${var.account_name}"
+  }
+}
+
+resource "aws_kms_key" "org_eu_central_1" {
+  provider            = "aws.eu_central_1"
+  description         = "Organization ${var.account_name}"
+  enable_key_rotation = true
+
+  tags {
+    "ManagedBy" = "terraform"
+    "Env"       = "global"
+    "Name"      = "${var.account_name}"
+  }
+}
+
+resource "aws_kms_key" "org_ap_southeast_2" {
+  provider            = "aws.ap_southeast_2"
   description         = "Organization ${var.account_name}"
   enable_key_rotation = true
 
