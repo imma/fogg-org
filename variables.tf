@@ -40,17 +40,23 @@ output "cloudfront" {
 
 output "kms_arn" {
   value = {
-    us-east-1 = "${aws_kms_key.org_us_east_1.arn}"
-    us-east-2 = "${aws_kms_key.org_us_east_2.arn}"
-    us-west-2 = "${aws_kms_key.org_us_west_2.arn}"
+    us-east-1      = "${aws_kms_key.org_us_east_1.arn}"
+    us-east-2      = "${aws_kms_key.org_us_east_2.arn}"
+    us-west-2      = "${aws_kms_key.org_us_west_2.arn}"
+    eu-west-1      = "${aws_kms_key.org_eu_west_1.arn}"
+    eu-central-1   = "${aws_kms_key.org_eu_central_1.arn}"
+    ap-southeast-2 = "${aws_kms_key.org_ap_southeast_2.arn}"
   }
 }
 
 output "kms_key_id" {
   value = {
-    us-east-1 = "${aws_kms_key.org_us_east_1.key_id}"
-    us-east-2 = "${aws_kms_key.org_us_east_2.key_id}"
-    us-west-2 = "${aws_kms_key.org_us_west_2.key_id}"
+    us-east-1      = "${aws_kms_key.org_us_east_1.key_id}"
+    us-east-2      = "${aws_kms_key.org_us_east_2.key_id}"
+    us-west-2      = "${aws_kms_key.org_us_west_2.key_id}"
+    eu-west-1      = "${aws_kms_key.org_eu_west_1.key_id}"
+    eu-central-1   = "${aws_kms_key.org_eu_central_1.key_id}"
+    ap-southeast-2 = "${aws_kms_key.org_ap_southeast_2.key_id}"
   }
 }
 
