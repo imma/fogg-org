@@ -42,6 +42,12 @@ data "aws_acm_certificate" "website" {
   statuses = ["ISSUED", "PENDING_VALIDATION"]
 }
 
+resource "null_resource" "vars" {
+  triggers {
+    region_account_id = "${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}"
+  }
+}
+
 resource "aws_iam_group" "administrators" {
   name = "administrators"
 }
@@ -74,7 +80,7 @@ data "aws_iam_policy_document" "operators" {
     ]
 
     resources = [
-      "arn:aws:kms:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:key/*",
+      "arn:aws:kms:${null_resource.vars.triggers.region_account_id}:key/*",
     ]
 
     condition {
@@ -245,7 +251,7 @@ data "aws_iam_policy_document" "config_sns" {
     ]
 
     resources = [
-      "arn:aws:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:config",
+      "arn:aws:sns:${null_resource.vars.triggers.region_account_id}:config",
     ]
 
     principals {
@@ -277,7 +283,7 @@ data "aws_iam_policy_document" "config_sns_sqs" {
     }
 
     resources = [
-      "arn:aws:sqs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:config",
+      "arn:aws:sqs:${null_resource.vars.triggers.region_account_id}:config",
     ]
 
     condition {
