@@ -785,7 +785,33 @@ resource "aws_iam_role_policy_attachment" "macie_setup_cloudtrail" {
   count      = "${var.want_macie}"
 }
 
-resource "aws_api_gateway_account" "org" {
+resource "aws_api_gateway_account" "org_us_east_1" {
+  provider            = "aws.us_east_1"
+  cloudwatch_role_arn = "${aws_iam_role.api_gateway.arn}"
+}
+
+resource "aws_api_gateway_account" "org_us_east_2" {
+  provider            = "aws.us_east_2"
+  cloudwatch_role_arn = "${aws_iam_role.api_gateway.arn}"
+}
+
+resource "aws_api_gateway_account" "org_us_west_2" {
+  provider            = "aws.us_west_2"
+  cloudwatch_role_arn = "${aws_iam_role.api_gateway.arn}"
+}
+
+resource "aws_api_gateway_account" "org_eu_west_1" {
+  provider            = "aws.eu_west_1"
+  cloudwatch_role_arn = "${aws_iam_role.api_gateway.arn}"
+}
+
+resource "aws_api_gateway_account" "org_eu_central_1" {
+  provider            = "aws.eu_central_1"
+  cloudwatch_role_arn = "${aws_iam_role.api_gateway.arn}"
+}
+
+resource "aws_api_gateway_account" "org_ap_southeast_1" {
+  provider            = "aws.ap_southeast_1"
   cloudwatch_role_arn = "${aws_iam_role.api_gateway.arn}"
 }
 
