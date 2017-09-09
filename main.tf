@@ -840,22 +840,7 @@ resource "aws_iam_role" "api_gateway" {
 EOF
 }
 
-resource "aws_iam_role_policy" "api_gateway" {
-  name = "default"
-  role = "${aws_iam_role.api_gateway.id}"
-
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "logs:*"
-        ],
-      "Resource": "arn:aws:logs:::*"
-    }
-  ]
-}
-EOF
+resource "aws_iam_role_policy_attachment" "api_gateway" {
+  role       = "${aws_iam_role.api_gateway.name}"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
 }
