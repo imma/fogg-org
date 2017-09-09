@@ -846,13 +846,7 @@ resource "aws_iam_role_policy" "api_gateway" {
     {
       "Effect": "Allow",
       "Action": [
-        "logs:CreateLogGroup",
-        "logs:CreateLogStream",
-        "logs:DescribeLogGroups",
-        "logs:DescribeLogStreams",
-        "logs:PutLogEvents",
-        "logs:GetLogEvents",
-        "logs:FilterLogEvents"
+        "logs:*"
         ],
       "Resource": "*"
     }
