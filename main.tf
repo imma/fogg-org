@@ -812,7 +812,7 @@ resource "aws_api_gateway_account" "org_eu_central_1" {
 
 resource "aws_api_gateway_account" "org_ap_southeast_2" {
   provider            = "aws.ap_southeast_2"
-  cloudwatch_role_arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
+  cloudwatch_role_arn = "${aws_iam_role.api_gateway.arn}"
 }
 
 resource "aws_iam_role" "api_gateway" {
