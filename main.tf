@@ -793,31 +793,31 @@ resource "aws_api_gateway_account" "org_us_east_1" {
 resource "aws_api_gateway_account" "org_us_east_2" {
   provider            = "aws.us_east_2"
   cloudwatch_role_arn = "${aws_iam_role.api_gateway.arn}"
-  depends_ony         = ["aws_api_gateway_account.org_us_east_1"]
+  depends_on          = ["aws_api_gateway_account.org_us_east_1"]
 }
 
 resource "aws_api_gateway_account" "org_us_west_2" {
   provider            = "aws.us_west_2"
   cloudwatch_role_arn = "${aws_iam_role.api_gateway.arn}"
-  depends_ony         = ["aws_api_gateway_account.org_us_east_2"]
+  depends_on          = ["aws_api_gateway_account.org_us_east_2"]
 }
 
 resource "aws_api_gateway_account" "org_eu_west_1" {
   provider            = "aws.eu_west_1"
   cloudwatch_role_arn = "${aws_iam_role.api_gateway.arn}"
-  depends_ony         = ["aws_api_gateway_account.org_us_west_2"]
+  depends_on          = ["aws_api_gateway_account.org_us_west_2"]
 }
 
 resource "aws_api_gateway_account" "org_eu_central_1" {
   provider            = "aws.eu_central_1"
   cloudwatch_role_arn = "${aws_iam_role.api_gateway.arn}"
-  depends_ony         = ["aws_api_gateway_account.org_eu_west_1"]
+  depends_on          = ["aws_api_gateway_account.org_eu_west_1"]
 }
 
 resource "aws_api_gateway_account" "org_ap_southeast_2" {
   provider            = "aws.ap_southeast_2"
   cloudwatch_role_arn = "${aws_iam_role.api_gateway.arn}"
-  depends_ony         = ["aws_api_gateway_account.org_eu_central_1"]
+  depends_on          = ["aws_api_gateway_account.org_eu_central_1"]
 }
 
 resource "aws_iam_role" "api_gateway" {
