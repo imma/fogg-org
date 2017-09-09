@@ -846,11 +846,9 @@ resource "aws_iam_role_policy" "api_gateway" {
     {
       "Effect": "Allow",
       "Action": [
-        "logs:*",
-        "apigateway:*".
-        "*"
+        "logs:*"
         ],
-      "Resource": "*"
+      "Resource": "arn:aws:logs:::*"
     }
   ]
 }
