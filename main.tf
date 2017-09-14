@@ -326,7 +326,7 @@ POLICY
 }
 
 resource "aws_iam_role" "config" {
-  name_prefix = "config-"
+  name = "config"
 
   assume_role_policy = <<POLICY
 {
@@ -726,8 +726,8 @@ resource "aws_kms_key" "org_ap_southeast_2" {
 }
 
 resource "aws_iam_role" "macie_service" {
-  name_prefix = "macie-setup-"
-  count       = "${var.want_macie}"
+  name  = "macie-setup"
+  count = "${var.want_macie}"
 
   assume_role_policy = <<POLICY
 {
@@ -753,8 +753,8 @@ resource "aws_iam_role_policy_attachment" "macie_service" {
 }
 
 resource "aws_iam_role" "macie_setup" {
-  name_prefix = "macie-service-"
-  count       = "${var.want_macie}"
+  name  = "macie-service"
+  count = "${var.want_macie}"
 
   assume_role_policy = <<POLICY
 {
@@ -816,7 +816,7 @@ resource "aws_api_gateway_account" "org_ap_southeast_2" {
 }
 
 resource "aws_iam_role" "api_gateway" {
-  name_prefix = "api-gateway-cloudwatch-"
+  name = "api_gateway_cloudwatch"
 
   assume_role_policy = <<EOF
 {
