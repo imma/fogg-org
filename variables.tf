@@ -1,7 +1,3 @@
-variable "org" {
-  default = []
-}
-
 variable "domain_name" {}
 
 variable "account_name" {}
