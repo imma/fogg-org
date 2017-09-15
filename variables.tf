@@ -3,7 +3,7 @@ variable "domain_name" {}
 variable "account_name" {}
 
 variable "want_macie" {
-  default = true
+  default = 1
 }
 
 output "aws_account_id" {
