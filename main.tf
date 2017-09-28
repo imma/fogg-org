@@ -615,8 +615,6 @@ resource "aws_cloudfront_origin_access_identity" "website" {
   comment = "b-${format("%.8s",sha1(data.aws_caller_identity.current.account_id))}-global-cdn"
 }
 
-resource "aws_cloudfront_distribution" "website_cdn" {}
-
 resource "aws_cloudfront_distribution" "website" {
   origin {
     domain_name = "${aws_s3_bucket.website.website_endpoint}"
@@ -639,7 +637,7 @@ resource "aws_cloudfront_distribution" "website" {
     }
   }
 
-  enabled             = true
+  enabled   t          = true
   default_root_object = "index.html"
   price_class         = "PriceClass_100"
 
