@@ -569,7 +569,7 @@ resource "aws_iam_account_alias" "org" {
 
 resource "aws_s3_bucket" "website" {
   bucket = "b-${format("%.8s",sha1(data.aws_caller_identity.current.account_id))}-global-cdn"
-  acl    = "private"
+  acl    = "public-read"
 
   website {
     index_document = "index.html"
