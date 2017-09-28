@@ -626,9 +626,9 @@ resource "aws_cloudfront_distribution" "website" {
     domain_name = "b-${format("%.8s",sha1(data.aws_caller_identity.current.account_id))}-global-cdn.s3-website-${data.aws_region.current.name}.amazonaws.com"
     origin_id   = "b-${format("%.8s",sha1(data.aws_caller_identity.current.account_id))}-global-cdn"
 
-    s3_origin_config {
-      origin_access_identity = "${aws_cloudfront_origin_access_identity.website.cloudfront_access_identity_path}"
-    }
+    #s3_origin_config {
+    #  origin_access_identity = "${aws_cloudfront_origin_access_identity.website.cloudfront_access_identity_path}"
+    #}
 
     custom_origin_config {
       origin_protocol_policy = "http-only"
