@@ -571,6 +571,12 @@ resource "aws_s3_bucket" "website" {
   bucket = "b-${format("%.8s",sha1(data.aws_caller_identity.current.account_id))}-global-cdn"
   acl    = "private"
 
+  website {
+    index_document = "index.html"
+    error_document = "404.html"
+    routing_rules  = ""
+  }
+
   policy = <<EOF
 {
     "Version": "2008-10-17",
