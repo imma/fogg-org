@@ -6,6 +6,10 @@ variable "want_macie" {
   default = 1
 }
 
+variable "cdn_secret" {
+  default = "not-a-secret"
+}
+
 output "aws_account_id" {
   value = "${data.aws_caller_identity.current.account_id}"
 }

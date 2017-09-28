@@ -568,7 +568,7 @@ resource "aws_iam_account_alias" "org" {
 }
 
 resource "aws_s3_bucket" "website" {
-  bucket = "b-${format("%.8s",sha1(data.aws_caller_identity.current.account_id))}-global-website"
+  bucket = "b-${format("%.8s",sha1(data.aws_caller_identity.current.account_id))}-global-cdn"
   acl    = "private"
 
   policy = <<EOF
@@ -583,9 +583,25 @@ resource "aws_s3_bucket" "website" {
                 "AWS": "${aws_cloudfront_origin_access_identity.website.iam_arn}"
             },
             "Action": "s3:GetObject",
-            "Resource": "arn:${data.aws_partition.current.partition}:s3:::b-${format("%.8s",sha1(data.aws_caller_identity.current.account_id))}-global-website/*"
+            "Resource": "arn:${data.aws_partition.current.partition}:s3:::b-${format("%.8s",sha1(data.aws_caller_identity.current.account_id))}-global-cdn/*"
+        },
+        {
+          "Sid": "2",
+          "Principal": {
+            "AWS": "*"
+          },
+          "Effect": "Allow",
+          "Action": [
+            "s3:GetObject"
+          ],
+          "Resource": "arn:${data.aws_partition.current.partition}:s3:::b-${format("%.8s",sha1(data.aws_caller_identity.current.account_id))}-global-cdn/*",
+          "Condition": {
+            "StringEquals": {
+              "aws:UserAgent": "${var.cdn_secret}"
+            }
+          }
         }
-    ]
+      ]
 }
 EOF
 
@@ -596,16 +612,30 @@ EOF
 }
 
 resource "aws_cloudfront_origin_access_identity" "website" {
-  comment = "b-${format("%.8s",sha1(data.aws_caller_identity.current.account_id))}-global-website"
+  comment = "b-${format("%.8s",sha1(data.aws_caller_identity.current.account_id))}-global-cdn"
 }
+
+resource "aws_cloudfront_distribution" "website_cdn" {}
 
 resource "aws_cloudfront_distribution" "website" {
   origin {
-    domain_name = "b-${format("%.8s",sha1(data.aws_caller_identity.current.account_id))}-global-website.s3.amazonaws.com"
-    origin_id   = "b-${format("%.8s",sha1(data.aws_caller_identity.current.account_id))}-global-website"
+    domain_name = "${aws_s3_bucket.website.website_endpoint}"
+    origin_id   = "b-${format("%.8s",sha1(data.aws_caller_identity.current.account_id))}-global-cdn"
 
     s3_origin_config {
       origin_access_identity = "${aws_cloudfront_origin_access_identity.website.cloudfront_access_identity_path}"
+    }
+
+    custom_origin_config {
+      origin_protocol_policy = "http-only"
+      http_port              = "80"
+      https_port             = "443"
+      origin_ssl_protocols   = ["TLSv1"]
+    }
+
+    custom_header {
+      name  = "User-Agent"
+      value = "${var.cdn_secret}"
     }
   }
 
@@ -618,7 +648,7 @@ resource "aws_cloudfront_distribution" "website" {
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "b-${format("%.8s",sha1(data.aws_caller_identity.current.account_id))}-global-website"
+    target_origin_id = "b-${format("%.8s",sha1(data.aws_caller_identity.current.account_id))}-global-cdn"
 
     forwarded_values {
       query_string = false
