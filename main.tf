@@ -637,7 +637,7 @@ resource "aws_cloudfront_distribution" "website" {
     }
   }
 
-  enabled   t          = true
+  enabled             = true
   default_root_object = "index.html"
   price_class         = "PriceClass_100"
 
