@@ -822,7 +822,7 @@ resource "aws_iam_role" "macie_service" {
   name  = "macie-setup"
   count = "${var.want_macie}"
 
-  assume_role_olicy = <<POLICY
+  assume_role_policy = <<POLICY
 {
   "Version": "2012-10-17",
   "Statement": [
