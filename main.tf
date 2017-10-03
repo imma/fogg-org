@@ -636,7 +636,6 @@ resource "aws_cloudfront_distribution" "website" {
       https_port             = "443"
       origin_ssl_protocols   = ["TLSv1"]
     }
-
     custom_header {
       name  = "User-Agent"
       value = "${var.cdn_secret}"
@@ -699,6 +698,11 @@ resource "aws_kms_key" "org_us_east_1" {
   }
 }
 
+resource "aws_kms_alias" "ssm_ps_us_east_1" {
+  name          = "alias/parameter_store_key"
+  target_key_id = "${aws_kms_key.org_us_east_1.key_id}"
+}
+
 resource "aws_kms_key" "org_us_east_2" {
   provider            = "aws.us_east_2"
   description         = "Organization ${var.account_name}"
@@ -709,6 +713,11 @@ resource "aws_kms_key" "org_us_east_2" {
     "Env"       = "global"
     "Name"      = "${var.account_name}"
   }
+}
+
+resource "aws_kms_alias" "ssm_ps_us_east_2" {
+  name          = "alias/parameter_store_key"
+  target_key_id = "${aws_kms_key.org_us_east_2.key_id}"
 }
 
 resource "aws_kms_key" "org_us_west_2" {
@@ -723,6 +732,11 @@ resource "aws_kms_key" "org_us_west_2" {
   }
 }
 
+resource "aws_kms_alias" "ssm_ps_us_west_2" {
+  name          = "alias/parameter_store_key"
+  target_key_id = "${aws_kms_key.org_us_west_2.key_id}"
+}
+
 resource "aws_kms_key" "org_eu_west_1" {
   provider            = "aws.eu_west_1"
   description         = "Organization ${var.account_name}"
@@ -733,6 +747,11 @@ resource "aws_kms_key" "org_eu_west_1" {
     "Env"       = "global"
     "Name"      = "${var.account_name}"
   }
+}
+
+resource "aws_kms_alias" "ssm_ps_eu_west_1" {
+  name          = "alias/parameter_store_key"
+  target_key_id = "${aws_kms_key.org_eu_west_1.key_id}"
 }
 
 resource "aws_kms_key" "org_eu_central_1" {
@@ -747,6 +766,11 @@ resource "aws_kms_key" "org_eu_central_1" {
   }
 }
 
+resource "aws_kms_alias" "ssm_ps_eu_central_1" {
+  name          = "alias/parameter_store_key"
+  target_key_id = "${aws_kms_key.org_eu_central_1.key_id}"
+}
+
 resource "aws_kms_key" "org_ap_southeast_2" {
   provider            = "aws.ap_southeast_2"
   description         = "Organization ${var.account_name}"
@@ -759,11 +783,16 @@ resource "aws_kms_key" "org_ap_southeast_2" {
   }
 }
 
+resource "aws_kms_alias" "ssm_ps_ap_southeast_2" {
+  name          = "alias/parameter_store_key"
+  target_key_id = "${aws_kms_key.org_ap_southeast_2.key_id}"
+}
+
 resource "aws_iam_role" "macie_service" {
   name  = "macie-setup"
   count = "${var.want_macie}"
 
-  assume_role_policy = <<POLICY
+  assume_role_olicy = <<POLICY
 {
   "Version": "2012-10-17",
   "Statement": [
